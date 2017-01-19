@@ -5,10 +5,10 @@ source /home/`whoami`/.low-battery
 VAR_SLEEP=$REGULAR_SLEEP
 status=`upower -i $(upower -e | grep 'BAT') | grep -E 'state|percentage'`
 while true; do
-  if [ `echo $status | grep -o -E *discharging*` = discharging ] && [ `echo $status | grep -o -P [1-9]+` -le $CRITICAL ]; then
+  if [ `echo $status | grep -o -E *discharging*` = discharging ] && [ `echo $status | grep -o -P [0-9]+` -le $CRITICAL ]; then
     ( speaker-test -t sine -f $FREQUENCY > /dev/null)& pid=$! ; sleep ${SECONDS}s ; kill -9 $pid
     VAR_SLEEP=$CRITICAL_SLEEP
-  elif [ `echo $status | grep -o -E *discharging*` = discharging ] && [ `echo $status | grep -o -P [1-9]+` -le $LOW ]; then 
+  elif [ `echo $status | grep -o -E *discharging*` = discharging ] && [ `echo $status | grep -o -P [0-9]+` -le $LOW ]; then 
     ( speaker-test -t sine -f $FREQUENCY > /dev/null)& pid=$! ; sleep ${SECONDS}s ; kill -9 $pid
     VAR_SLEEP=$LOW_SLEEP
   else
