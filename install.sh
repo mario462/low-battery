@@ -3,7 +3,7 @@
 service='low-battery'
 chmod +x "$service"
 cp ./${service}.conf /etc/
-mkdir /usr/share/low-battery
+mkdir -p /usr/share/low-battery
 cp ./*.wav /usr/share/low-battery
 cp ./$service /usr/local/bin/$service
 cp ./$service.service /lib/systemd/system/$service.service
