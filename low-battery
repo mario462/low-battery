@@ -10,20 +10,20 @@ else
   LOW=25                     #below this charge percent battery is considered low
   LOW_SOUND=laser.wav        #sound to be played when battery is low 
   CRITICAL_SOUND=alert.wav   #sound to be played when battery is critical
+  VOLUME=100		     #volume to set the speakers (in percent)
 fi
 
 VAR_SLEEP=$REGULAR_SLEEP
 while true; do
   status=`upower -i $(upower -e | grep 'BAT') | grep -E 'state|percentage'`
-    aplay $CRITICAL_SOUND 2> /dev/null
   if [ ! -z `echo $status | grep -o -E *discharging*` ] && [ `echo $status | grep -o -P [0-9]+` -le $CRITICAL ]; then
     pactl set-sink-mute @DEFAULT_SINK@ 0
-    pactl set-sink-volume @DEFAULT_SINK@ 100%
+    pactl set-sink-volume @DEFAULT_SINK@ ${VOLUME}%
     VAR_SLEEP=$CRITICAL_SLEEP
     aplay $LOW_SOUND 2> /dev/null
   elif [ ! -z `echo $status | grep -o -E *discharging*` ] && [ `echo $status | grep -o -P [0-9]+` -le $LOW ]; then 
     pactl set-sink-mute @DEFAULT_SINK@ 0
-    pactl set-sink-volume @DEFAULT_SINK@ 100%
+    pactl set-sink-volume @DEFAULT_SINK@ ${VOLUME}%
     VAR_SLEEP=$LOW_SLEEP
   else
     VAR_SLEEP=$REGULAR_SLEEP

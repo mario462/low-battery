@@ -5,3 +5,4 @@ CRITICAL=15                #below this charge percent battery is considered crit
 LOW=25                     #below this charge percent battery is considered low
 LOW_SOUND=laser.wav        #sound to be played when battery is low 
 CRITICAL_SOUND=alert.wav   #sound to be played when battery is critical
+VOLUME=100                 #volume to set the speakers (in percent)
