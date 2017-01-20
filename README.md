@@ -1,8 +1,9 @@
 # low-battery
-Fully configurable script to make your laptop alert you when battery is below a treshold.
+Simple service that runs in the background and plays a sound when your laptop battery is low.
 
-The script comes with reasonable default parameters, but if you can to set your own, just create a `.low-battery` file in your home.
-There is a sample config file included with the project.
+In order to install the service, just run the `install.sh` script as root.
+
+Configuration of the service will be defined in `/etc/low-battery.conf`
 
 The program relies on the `pulseaudio` sound server, as well as on the `aplay` command-line player.
  

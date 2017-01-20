@@ -1,30 +1,20 @@
 #!/bin/bash
 
-if [ -e /home/`whoami`/.low-battery ]; then
-  source /home/`whoami`/.low-battery
-else
-  REGULAR_SLEEP=30           #how many seconds between status check
-  CRITICAL_SLEEP=60          #how often to beep when battery is critical
-  LOW_SLEEP=180              #how often to beep when battery is low  
-  CRITICAL=15                #below this charge percent battery is considered critical
-  LOW=25                     #below this charge percent battery is considered low
-  LOW_SOUND=laser.wav        #sound to be played when battery is low 
-  CRITICAL_SOUND=alert.wav   #sound to be played when battery is critical
-  VOLUME=100		     #volume to set the speakers (in percent)
-fi
+source /etc/low-battery.conf
 
 VAR_SLEEP=$REGULAR_SLEEP
 while true; do
   status=`upower -i $(upower -e | grep 'BAT') | grep -E 'state|percentage'`
   if [ ! -z `echo $status | grep -o -E *discharging*` ] && [ `echo $status | grep -o -P [0-9]+` -le $CRITICAL ]; then
     pactl set-sink-mute @DEFAULT_SINK@ 0
-    pactl set-sink-volume @DEFAULT_SINK@ ${VOLUME}%
+    pactl set-sink-volume @DEFAULT_SINK@ ${CRITICAL_VOLUME}%
     VAR_SLEEP=$CRITICAL_SLEEP
-    aplay $LOW_SOUND 2> /dev/null
+    aplay $CRITICAL_SOUND 2> /dev/null
   elif [ ! -z `echo $status | grep -o -E *discharging*` ] && [ `echo $status | grep -o -P [0-9]+` -le $LOW ]; then 
     pactl set-sink-mute @DEFAULT_SINK@ 0
-    pactl set-sink-volume @DEFAULT_SINK@ ${VOLUME}%
+    pactl set-sink-volume @DEFAULT_SINK@ ${LOW_VOLUME}%
     VAR_SLEEP=$LOW_SLEEP
+    aplay $LOW_SOUND 2> /dev/null
   else
     VAR_SLEEP=$REGULAR_SLEEP
   fi

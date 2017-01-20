@@ -1,0 +1,10 @@
+[Unit]
+Description=play sound when battery is low
+After=syslog.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/low-battery
+
+[Install]
+WantedBy=multi-user.target
