@@ -15,15 +15,15 @@ fi
 VAR_SLEEP=$REGULAR_SLEEP
 while true; do
   status=`upower -i $(upower -e | grep 'BAT') | grep -E 'state|percentage'`
-    pactl set-sink-volume 0 100% 2> /dev/null
-    pactl set-sink-volume 1 100% 2> /dev/null
     aplay $CRITICAL_SOUND 2> /dev/null
   if [ ! -z `echo $status | grep -o -E *discharging*` ] && [ `echo $status | grep -o -P [0-9]+` -le $CRITICAL ]; then
+    pactl set-sink-mute @DEFAULT_SINK@ 0
+    pactl set-sink-volume @DEFAULT_SINK@ 100%
     VAR_SLEEP=$CRITICAL_SLEEP
-    pactl set-sink-volume 0 100% 2> /dev/null
-    pactl set-sink-volume 1 100% 2> /dev/null
     aplay $LOW_SOUND 2> /dev/null
   elif [ ! -z `echo $status | grep -o -E *discharging*` ] && [ `echo $status | grep -o -P [0-9]+` -le $LOW ]; then 
+    pactl set-sink-mute @DEFAULT_SINK@ 0
+    pactl set-sink-volume @DEFAULT_SINK@ 100%
     VAR_SLEEP=$LOW_SLEEP
   else
     VAR_SLEEP=$REGULAR_SLEEP
