@@ -15,15 +15,15 @@ fi
 VAR_SLEEP=$REGULAR_SLEEP
 while true; do
   status=`upower -i $(upower -e | grep 'BAT') | grep -E 'state|percentage'`
-  if [ `echo $status | grep -o -E *discharging*` = discharging ] && [ `echo $status | grep -o -P [0-9]+` -le $CRITICAL ]; then
     pactl set-sink-volume 0 100% 2> /dev/null
     pactl set-sink-volume 1 100% 2> /dev/null
     aplay $CRITICAL_SOUND 2> /dev/null
+  if [ ! -z `echo $status | grep -o -E *discharging*` ] && [ `echo $status | grep -o -P [0-9]+` -le $CRITICAL ]; then
     VAR_SLEEP=$CRITICAL_SLEEP
-  elif [ `echo $status | grep -o -E *discharging*` = discharging ] && [ `echo $status | grep -o -P [0-9]+` -le $LOW ]; then 
     pactl set-sink-volume 0 100% 2> /dev/null
     pactl set-sink-volume 1 100% 2> /dev/null
     aplay $LOW_SOUND 2> /dev/null
+  elif [ ! -z `echo $status | grep -o -E *discharging*` ] && [ `echo $status | grep -o -P [0-9]+` -le $LOW ]; then 
     VAR_SLEEP=$LOW_SLEEP
   else
     VAR_SLEEP=$REGULAR_SLEEP
