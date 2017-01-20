@@ -1,15 +1,31 @@
 #!/bin/bash
 
-source /home/`whoami`/.low-battery
+if [ -e /home/`whoami`/.low-battery ]; then
+  source /home/`whoami`/.low-battery
+else
+  FREQUENCY=2000             #frequency of the beep
+  SECONDS=1                  #duration of the beep in secons
+  REGULAR_SLEEP=60           #how many seconds between status check
+  CRITICAL_SLEEP=60          #how often to beep when battery is critical
+  LOW_SLEEP=300              #how often to beep when battery is low  
+  CRITICAL=10                #below this charge percent battery is considered critical
+  LOW=20                     #below this charge percent battery is considered low
+  LOW_SOUND=laser.wav        #sound to be played when battery is low 
+  CRITICAL_SOUND=alert.wav   #sound to be played when battery is critical
+fi
 
 VAR_SLEEP=$REGULAR_SLEEP
-status=`upower -i $(upower -e | grep 'BAT') | grep -E 'state|percentage'`
 while true; do
+  status=`upower -i $(upower -e | grep 'BAT') | grep -E 'state|percentage'`
   if [ `echo $status | grep -o -E *discharging*` = discharging ] && [ `echo $status | grep -o -P [0-9]+` -le $CRITICAL ]; then
-    ( speaker-test -t sine -f $FREQUENCY > /dev/null)& pid=$! ; sleep ${SECONDS}s ; kill -9 $pid
+    pactl set-sink-volume 0 100% 2> /dev/null
+    pactl set-sink-volume 1 100% 2> /dev/null
+    aplay $CRITICAL_SOUND 2> /dev/null
     VAR_SLEEP=$CRITICAL_SLEEP
   elif [ `echo $status | grep -o -E *discharging*` = discharging ] && [ `echo $status | grep -o -P [0-9]+` -le $LOW ]; then 
-    ( speaker-test -t sine -f $FREQUENCY > /dev/null)& pid=$! ; sleep ${SECONDS}s ; kill -9 $pid
+    pactl set-sink-volume 0 100% 2> /dev/null
+    pactl set-sink-volume 1 100% 2> /dev/null
+    aplay $LOW_SOUND 2> /dev/null
     VAR_SLEEP=$LOW_SLEEP
   else
     VAR_SLEEP=$REGULAR_SLEEP

@@ -1,7 +1,9 @@
-FREQUENCY=2000     #frequency of the beep
-SECONDS=1          #duration of the beep in secons
-REGULAR_SLEEP=60   #how many seconds between status check
-CRITICAL_SLEEP=60  #how often to beep when battery is critical
-LOW_SLEEP=300      #how often to beep when battery is low  
-CRITICAL=5         #below this charge percent battery is considered critical
-LOW=20             #below this charge percent battery is considered low
+FREQUENCY=2000             #frequency of the beep
+SECONDS=1                  #duration of the beep in secons
+REGULAR_SLEEP=60           #how many seconds between status check
+CRITICAL_SLEEP=60          #how often to beep when battery is critical
+LOW_SLEEP=300              #how often to beep when battery is low  
+CRITICAL=5                 #below this charge percent battery is considered critical
+LOW=20                     #below this charge percent battery is considered low
+LOW_SOUND=laser.wav        #sound to be played when battery is low 
+CRITICAL_SOUND=alert.wav   #sound to be played when battery is critical 
