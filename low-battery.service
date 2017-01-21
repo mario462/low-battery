@@ -4,7 +4,7 @@ After=syslog.target
 
 [Service]
 Type=simple
-User=mario
+User=USER
 Group=users
 ExecStart=/usr/local/bin/low-battery
 
