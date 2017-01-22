@@ -3,18 +3,20 @@
 source /etc/low-battery.conf
 
 VAR_SLEEP=$REGULAR_SLEEP
+pactl upload-sample $CRITICAL_SOUND critical
+pactl upload-sample $LOW_SOUND low
 while true; do
   status=`upower -i $(upower -e | grep 'BAT') | grep -E 'state|percentage'`
   if [ ! -z `echo $status | grep -o -E *discharging*` ] && [ `echo $status | grep -o -P [0-9]+` -le $CRITICAL ]; then
     pactl set-sink-mute @DEFAULT_SINK@ 0
     pactl set-sink-volume @DEFAULT_SINK@ ${CRITICAL_VOLUME}%
     VAR_SLEEP=$CRITICAL_SLEEP
-    aplay $CRITICAL_SOUND 2> /dev/null
+    pactl play-sample critical
   elif [ ! -z `echo $status | grep -o -E *discharging*` ] && [ `echo $status | grep -o -P [0-9]+` -le $LOW ]; then 
     pactl set-sink-mute @DEFAULT_SINK@ 0
     pactl set-sink-volume @DEFAULT_SINK@ ${LOW_VOLUME}%
     VAR_SLEEP=$LOW_SLEEP
-    aplay $LOW_SOUND 2> /dev/null
+    pactl play-sample low
   else
     VAR_SLEEP=$REGULAR_SLEEP
   fi
