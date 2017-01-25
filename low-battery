@@ -2,6 +2,8 @@
 
 source /etc/low-battery.conf
 
+export DISPLAY=:0
+
 VAR_SLEEP=$REGULAR_SLEEP
 pactl upload-sample $CRITICAL_SOUND critical
 pactl upload-sample $LOW_SOUND low
